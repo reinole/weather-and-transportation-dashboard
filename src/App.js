@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import styled from 'styled-components';
 import './App.css';
+import Weather from './components/Weather';
+import Ruter from './components/Ruter';
+import Time from './components/Time';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="App">
+                <div className="weather-div">
+                    <Time />
+                    <Wrapper>
+                        <Ruter />
+                        <Weather />
+                    </Wrapper>
+                </div>
+            </div>
+        );
+    }
 }
+
+const Wrapper = styled.div`
+    display: flex;
+`;
+
+//Ting man kan ha i denne:
+// Vær
+// Ruter
+// Dagens kalender oppgaver
 
 export default App;
