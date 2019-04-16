@@ -79,20 +79,16 @@ export default function Ruter() {
 
                     return (
                         <SingleTripWrapper>
+                            {/* //{console.log({ trips })} */}
                             {trips.legs.map(leg => {
                                 if (leg.mode === 'bus') {
-                                    return (
-                                        <BusName>
-                                            {
-                                                leg.fromEstimatedCall
-                                                    .destinationDisplay
-                                                    .frontText
-                                            }
-                                        </BusName>
-                                    );
+                                    let destinationText =
+                                        leg.fromEstimatedCall.destinationDisplay
+                                            .frontText;
+                                    // // console.log(leg);
+                                    return <BusName>{destinationText}</BusName>;
                                 }
                             })}
-
                             <TripTime>
                                 <p>
                                     {startTimeHours}:{startTimeMinute}
@@ -101,10 +97,10 @@ export default function Ruter() {
                                 <p>
                                     {endTimeHours}:{endTimeMinutes}
                                 </p>
+                                <TripDuration>
+                                    ca. {duration} minutter
+                                </TripDuration>
                             </TripTime>
-                            <TripDuration>
-                                <p> Varighet: {duration} minutter</p>
-                            </TripDuration>
                         </SingleTripWrapper>
                     );
                 })
@@ -118,6 +114,9 @@ export default function Ruter() {
 const RuterWrapper = styled.div`
     background-color: #ededed;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 `;
 
 const SingleTripWrapper = styled.div`
@@ -144,10 +143,9 @@ const TripTime = styled.div`
     }
 `;
 
-const TripDuration = styled.div`
-    display: flex;
-    p {
-        margin: 0;
-        font-size: 0.8rem;
-    }
+const TripDuration = styled.p`
+    margin: 0;
+    font-size: 0.8rem;
+    padding-left: 0.5rem;
+    font-weight: initial;
 `;

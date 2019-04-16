@@ -11,6 +11,7 @@ class App extends Component {
             <div className="App">
                 <div className="weather-div">
                     <Time />
+
                     <Wrapper>
                         <Ruter />
                         <Weather />
