@@ -79,14 +79,20 @@ export default function Ruter() {
 
                     return (
                         <SingleTripWrapper>
-                            {/* //{console.log({ trips })} */}
+                            {console.log({ trips })}
                             {trips.legs.map(leg => {
                                 if (leg.mode === 'bus') {
+                                    let busNumber = leg.line.publicCode;
                                     let destinationText =
                                         leg.fromEstimatedCall.destinationDisplay
                                             .frontText;
-                                    // // console.log(leg);
-                                    return <BusName>{destinationText}</BusName>;
+                                    return (
+                                        <BusName>
+                                            <BusNumber>{busNumber}</BusNumber>
+
+                                            {destinationText}
+                                        </BusName>
+                                    );
                                 }
                             })}
                             <TripTime>
@@ -97,9 +103,7 @@ export default function Ruter() {
                                 <p>
                                     {endTimeHours}:{endTimeMinutes}
                                 </p>
-                                <TripDuration>
-                                    ca. {duration} minutter
-                                </TripDuration>
+                                <TripDuration>ca. {duration} min</TripDuration>
                             </TripTime>
                         </SingleTripWrapper>
                     );
@@ -132,6 +136,14 @@ const BusName = styled.div`
     display: flex;
     margin-bottom: 6px;
     font-size: 1rem;
+`;
+
+const BusNumber = styled.div`
+    background-color: red;
+    padding: 2px 8px;
+    border-radius: 2px;
+    color: white;
+    margin-right: 4px;
 `;
 
 const TripTime = styled.div`

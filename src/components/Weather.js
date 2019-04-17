@@ -19,7 +19,7 @@ export default function Weather() {
         )
             .then(res => res.json())
             .then(res => setWeather(res));
-    }, []);
+    }, [weather, setWeather]);
 
     return (
         <div>
