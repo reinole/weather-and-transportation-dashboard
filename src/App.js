@@ -28,7 +28,8 @@ const Wrapper = styled.div`
 
 //Ting man kan ha i denne:
 // Vær
-// Ruter
+// Ruter'
+//  Ha en egen refresh button i Ruter (Hvis det skal være en tablet)
 // Dagens kalender oppgaver
 
 export default App;

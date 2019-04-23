@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 
 export default function Weather() {
-    const [weather, setWeather] = React.useState([]);
+    const [weather, setWeather] = useState([]);
 
     const newDate = new Date();
     let fullDate =
@@ -12,20 +12,20 @@ export default function Weather() {
         '-' +
         newDate.getDate();
 
-    React.useEffect(() => {
+    useEffect(() => {
         fetch(
             `https://rest.tv2.no/weather-dw-rest/forecast/detailed/grouped/place/134650382?days=1&day=${fullDate}`,
             { headers: { 'Content-Type': 'application/json' } }
         )
             .then(res => res.json())
             .then(res => setWeather(res));
-    }, [weather, setWeather]);
+    }, []);
 
     return (
         <div>
             {weather.length > 0 ? (
                 <div>
-                    {console.log({ weather })}
+                    {/* {console.log({ weather })} */}
                     <Table>
                         <TableBody>
                             <TableRowHead>
@@ -35,7 +35,7 @@ export default function Weather() {
                                 <TableHead>Regn</TableHead>
                                 <TableHead>Vind</TableHead>
                             </TableRowHead>
-                            {weather[0].weatherSixHourSteps.map(day => {
+                            {weather[0].weatherSixHourSteps.map((day, i) => {
                                 let endTime = (
                                     '0' + new Date(day.endtime).getHours()
                                 ).slice(-2);
@@ -44,7 +44,7 @@ export default function Weather() {
                                 ).slice(-2);
 
                                 return (
-                                    <TableRow>
+                                    <TableRow key={i + '40'}>
                                         <TableData time>
                                             {startTime} - {endTime}
                                         </TableData>

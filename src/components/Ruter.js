@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { angle, man } from '../utils/Icons';
 
 export default function Ruter() {
     const [ruterData, setRuterData] = useState('');
@@ -47,6 +48,12 @@ export default function Ruter() {
       }`;
 
     useEffect(() => {
+        fetchRuter();
+        setInterval(() => fetchRuter(), 1000 * 60);
+    }, []);
+
+    function fetchRuter() {
+        console.log('fetch');
         fetch('https://api.entur.io/journey-planner/v2/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -54,13 +61,12 @@ export default function Ruter() {
         })
             .then(res => res.json())
             .then(res => setRuterData(res.data.trip));
-    }, []);
+    }
 
     return (
         <RuterWrapper>
             {ruterData ? (
-                ruterData.tripPatterns.map(trips => {
-                    //console.log({ trips });
+                ruterData.tripPatterns.map((trips, i) => {
                     let startTimeHours = (
                         '0' + new Date(trips.startTime).getHours()
                     ).slice(-2);
@@ -78,33 +84,18 @@ export default function Ruter() {
                     let duration = Math.floor(trips.duration / 60);
 
                     return (
-                        <SingleTripWrapper>
-                            {console.log({ trips })}
-                            {trips.legs.map(leg => {
-                                if (leg.mode === 'bus') {
-                                    let busNumber = leg.line.publicCode;
-                                    let destinationText =
-                                        leg.fromEstimatedCall.destinationDisplay
-                                            .frontText;
-                                    return (
-                                        <BusName>
-                                            <BusNumber>{busNumber}</BusNumber>
-
-                                            {destinationText}
-                                        </BusName>
-                                    );
-                                }
-                            })}
+                        <SingleTripWrapper key={i + '10'}>
                             <TripTime>
-                                <p>
+                                <TripStartEnd>
                                     {startTimeHours}:{startTimeMinute}
-                                </p>
-                                <p>-</p>
-                                <p>
+                                </TripStartEnd>
+                                <TripStartEnd>-</TripStartEnd>
+                                <TripStartEnd>
                                     {endTimeHours}:{endTimeMinutes}
-                                </p>
-                                <TripDuration>ca. {duration} min</TripDuration>
+                                </TripStartEnd>
+                                <TripDuration>{duration}min</TripDuration>
                             </TripTime>
+                            {RenderLegs(trips)}
                         </SingleTripWrapper>
                     );
                 })
@@ -112,6 +103,37 @@ export default function Ruter() {
                 <p>Henter</p>
             )}
         </RuterWrapper>
+    );
+}
+
+function RenderLegs(trips) {
+    return (
+        <TripLegs>
+            {/* {console.log({ trips })} */}
+            {trips.legs.map((leg, i) => {
+                // console.log({ leg });
+                if (leg.mode === 'foot') {
+                    return (
+                        <BusName key={i + '20'}>
+                            <Svg>{man}</Svg>
+                        </BusName>
+                    );
+                }
+                //console.log(trips.legs.length - 1);
+                // {trips.legs.length -1 ? }
+                if (leg.mode === 'bus') {
+                    let busNumber = leg.line.publicCode;
+                    let destinationText =
+                        leg.fromEstimatedCall.destinationDisplay.frontText;
+                    return (
+                        <BusName key={i + '30'}>
+                            <Svg angle>{angle}</Svg>
+                            <BusNumber>{busNumber}</BusNumber>
+                        </BusName>
+                    );
+                }
+            })}
+        </TripLegs>
     );
 }
 
@@ -132,10 +154,33 @@ const SingleTripWrapper = styled.div`
     padding: 0.5rem 1rem;
 `;
 
+const TripLegs = styled.div`
+    display: flex;
+    margin-top: 6px;
+`;
+
 const BusName = styled.div`
     display: flex;
     margin-bottom: 6px;
     font-size: 1rem;
+`;
+
+const Svg = styled.div`
+    display: flex;
+    align-items: center;
+    svg {
+        padding: 4px 6px 4px 0;
+        height: 1rem;
+        width: 1rem;
+    }
+
+    ${props =>
+        props.angle &&
+        css`
+            svg {
+                width: 0.6rem;
+            }
+        `}
 `;
 
 const BusNumber = styled.div`
@@ -143,21 +188,31 @@ const BusNumber = styled.div`
     padding: 2px 8px;
     border-radius: 2px;
     color: white;
-    margin-right: 4px;
+    margin-right: 8px;
+    svg {
+        height: 1.3rem;
+        g {
+            path {
+                background-color: white;
+            }
+        }
+    }
 `;
 
 const TripTime = styled.div`
     display: flex;
-    p {
-        margin: 0;
-        font-weight: bold;
-        font-size: 0.8rem;
-    }
+`;
+
+const TripStartEnd = styled.p`
+    margin: 0;
+    font-weight: bold;
+    font-size: 1rem;
 `;
 
 const TripDuration = styled.p`
     margin: 0;
-    font-size: 0.8rem;
     padding-left: 0.5rem;
     font-weight: initial;
+    color: gray;
+    font-size: 0.8rem;
 `;
