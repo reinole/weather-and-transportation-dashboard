@@ -22,9 +22,9 @@ export default function Weather() {
     }, []);
 
     return (
-        <div>
+        <Wrapper>
             {weather.length > 0 ? (
-                <div>
+                <TableWrapper>
                     {/* {console.log({ weather })} */}
                     <Table>
                         <TableBody>
@@ -63,13 +63,21 @@ export default function Weather() {
                             })}
                         </TableBody>
                     </Table>
-                </div>
+                </TableWrapper>
             ) : (
                 <p>henter</p>
             )}
-        </div>
+        </Wrapper>
     );
 }
+
+const Wrapper = styled.div`
+    width: 100%;
+    flex: 1;
+    height: 100%;
+`;
+
+const TableWrapper = styled.div``;
 
 const Table = styled.div`
     background-color: white;
@@ -79,7 +87,9 @@ const Table = styled.div`
     flex: 1;
 `;
 
-const TableBody = styled.div``;
+const TableBody = styled.div`
+    width: 100%;
+`;
 
 const TableRowHead = styled.div`
     display: flex;
@@ -88,8 +98,6 @@ const TableRowHead = styled.div`
 
 const TableRow = styled.div`
     display: flex;
-    border-left: 1px solid white;
-    border-right: 1px solid white;
 
     &:nth-child(even) {
         background-color: #ededed;
@@ -100,8 +108,8 @@ const TableHead = styled.p`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 5rem;
     height: 2.5rem;
+    flex: 1;
     margin: 0;
     border-left: 1px solid white;
     border-right: 1px solid white;
@@ -111,10 +119,14 @@ const TableData = styled.p`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 5rem;
-    height: 2.5rem;
+    height: 3rem;
+    flex: 1;
     margin: 0;
-    border-right: 1px dashed lightblue;
+    border-right: 1px solid lightblue;
+
+    &:last-of-type {
+        border-right: none;
+    }
 
     ${props =>
         props.weather &&
@@ -128,6 +140,6 @@ const TableData = styled.p`
         css`
             color: white;
             background-color: #273b4f;
-            border-bottom: 1px dashed lightblue;
+            border-bottom: 1px solid lightblue;
         `};
 `;

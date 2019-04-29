@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import RealTime from './hooks/realTime';
-import RealDate from './hooks/realDate';
+import CurrentTime from './hooks/realTime';
+import CurrentDate from './hooks/realDate';
 
 export default function Time() {
     return (
         <WatchWrapper>
             <ClockWrapper>
-                Klokken er: <Clock>{RealTime()}</Clock>
+                Klokken er: <Clock>{CurrentTime()}</Clock>
             </ClockWrapper>
-            <DateWrapper>Dato: {RealDate()}</DateWrapper>
+            <DateWrapper>Dato: {CurrentDate()}</DateWrapper>
         </WatchWrapper>
     );
 }

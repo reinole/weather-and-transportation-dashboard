@@ -1,15 +1,32 @@
 import { useState, useEffect } from 'react';
 
-export default function RealDate() {
-    const [realDate, setRealDate] = useState(new Date().toLocaleDateString());
+export default function CurrentDate() {
+    const [currentDate, setCurrentDate] = useState(
+        new Date().toLocaleDateString()
+    );
+
+    function UpdateIfDateChanged() {
+        const newDate = new Date().toLocaleDateString();
+
+        if (newDate !== currentDate) {
+            setCurrentDate(newDate);
+        }
+    }
 
     useEffect(() => {
-        setInterval(() => updateDate(), 1000 * 60 * 60);
+        setInterval(() => UpdateIfDateChanged(), 1000 * 60);
     }, []);
 
     function updateDate() {
-        setRealDate(new Date().toLocaleDateString());
+        setCurrentDate(new Date().toLocaleDateString());
     }
 
-    return realDate;
+    return currentDate;
 }
+
+/*  Improvement 
+
+  Function should update on specific time, 12am
+  Maybe on change? 
+
+  */

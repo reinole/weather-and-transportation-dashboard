@@ -24,6 +24,11 @@ class App extends Component {
 
 const Wrapper = styled.div`
     display: flex;
+    flex-direction: row;
+
+    @media all and (max-width: 700px) {
+        flex-direction: column;
+    }
 `;
 
 //Ting man kan ha i denne:
