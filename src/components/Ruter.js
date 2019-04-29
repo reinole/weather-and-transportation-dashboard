@@ -8,10 +8,9 @@ export default function Ruter() {
     const query = `{
         trip(
           from: {
-              name: "Askergata 1, Oslo"
           coordinates: {
-              longitude: 10.769164365069429, 
-              latitude: 59.930828286059814
+            longitude: 10.766396, 
+            latitude: 59.928188
             }
         }
           to: {
@@ -30,6 +29,7 @@ export default function Ruter() {
             endTime
             duration
             legs {
+                expectedStartTime
                 fromEstimatedCall{
                     date
                     destinationDisplay {
@@ -53,7 +53,6 @@ export default function Ruter() {
     }, []);
 
     function fetchRuter() {
-        console.log('fetch');
         fetch('https://api.entur.io/journey-planner/v2/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -67,6 +66,7 @@ export default function Ruter() {
         <RuterWrapper>
             {ruterData ? (
                 ruterData.tripPatterns.map((trips, i) => {
+                    console.log(trips);
                     let startTimeHours = (
                         '0' + new Date(trips.startTime).getHours()
                     ).slice(-2);
@@ -107,32 +107,33 @@ export default function Ruter() {
 }
 
 function RenderLegs(trips) {
+    const destination = trips.legs.filter(leg => leg.mode === 'bus')[0]
+        .fromEstimatedCall.destinationDisplay.frontText;
+    console.log(destination);
     return (
         <TripLegs>
-            {/* {console.log({ trips })} */}
-            {trips.legs.map((leg, i) => {
-                // console.log({ leg });
-                if (leg.mode === 'foot') {
-                    return (
-                        <BusName key={i + '20'}>
-                            <Svg>{man}</Svg>
-                        </BusName>
-                    );
-                }
-                //console.log(trips.legs.length - 1);
-                // {trips.legs.length -1 ? }
-                if (leg.mode === 'bus') {
-                    let busNumber = leg.line.publicCode;
-                    let destinationText =
-                        leg.fromEstimatedCall.destinationDisplay.frontText;
-                    return (
-                        <BusName key={i + '30'}>
-                            <Svg angle>{angle}</Svg>
-                            <BusNumber>{busNumber}</BusNumber>
-                        </BusName>
-                    );
-                }
-            })}
+            <VizualTravel>
+                {trips.legs.map((leg, i) => {
+                    if (leg.mode === 'foot') {
+                        return (
+                            <BusName key={i + '20'}>
+                                <Svg>{man}</Svg>
+                            </BusName>
+                        );
+                    }
+                    if (leg.mode === 'bus') {
+                        let busNumber = leg.line.publicCode;
+                        return (
+                            <BusName key={i + '30'}>
+                                <BusNumber>{busNumber}</BusNumber>
+                                <Svg angle>{angle}</Svg>
+                            </BusName>
+                        );
+                    }
+                })}
+            </VizualTravel>
+
+            <BusName>{destination}</BusName>
         </TripLegs>
     );
 }
@@ -157,6 +158,11 @@ const SingleTripWrapper = styled.div`
 const TripLegs = styled.div`
     display: flex;
     margin-top: 6px;
+    justify-content: space-between;
+`;
+
+const VizualTravel = styled.div`
+    display: flex;
 `;
 
 const BusName = styled.div`
