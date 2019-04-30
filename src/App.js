@@ -4,6 +4,7 @@ import './App.css';
 import Weather from './components/Weather';
 import Ruter from './components/Ruter';
 import Time from './components/Time';
+import EventTracker from './components/EventTracker';
 
 class App extends Component {
     render() {
@@ -15,6 +16,10 @@ class App extends Component {
                     <Wrapper>
                         <Ruter />
                         <Weather />
+                    </Wrapper>
+                    <Wrapper>
+                        <EventTracker />
+                        <EventTracker />
                     </Wrapper>
                 </div>
             </div>
