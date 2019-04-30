@@ -66,7 +66,6 @@ export default function Ruter() {
         <RuterWrapper>
             {ruterData ? (
                 ruterData.tripPatterns.map((trips, i) => {
-                    console.log(trips);
                     let startTimeHours = (
                         '0' + new Date(trips.startTime).getHours()
                     ).slice(-2);

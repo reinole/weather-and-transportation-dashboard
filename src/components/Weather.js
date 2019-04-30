@@ -25,7 +25,6 @@ export default function Weather() {
         <Wrapper>
             {weather.length > 0 ? (
                 <TableWrapper>
-                    {/* {console.log({ weather })} */}
                     <Table>
                         <TableBody>
                             <TableRowHead>
