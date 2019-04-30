@@ -17,16 +17,5 @@ export default function CurrentDate() {
         setInterval(() => UpdateIfDateChanged(), 1000 * 60);
     }, []);
 
-    function updateDate() {
-        setCurrentDate(new Date().toLocaleDateString());
-    }
-
     return currentDate;
 }
-
-/*  Improvement 
-
-  Function should update on specific time, 12am
-  Maybe on change? 
-
-  */

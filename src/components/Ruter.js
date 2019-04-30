@@ -107,9 +107,15 @@ export default function Ruter() {
 }
 
 function RenderLegs(trips) {
-    const destination = trips.legs.filter(leg => leg.mode === 'bus')[0]
-        .fromEstimatedCall.destinationDisplay.frontText;
-    console.log(destination);
+    function ShowDestination() {
+        const destination = trips.legs.filter(leg => leg.mode === 'bus')[0]
+            .fromEstimatedCall;
+
+        if (destination !== null) {
+            return <span>{destination.destinationDisplay.frontText}</span>;
+        }
+    }
+
     return (
         <TripLegs>
             <VizualTravel>
@@ -133,7 +139,7 @@ function RenderLegs(trips) {
                 })}
             </VizualTravel>
 
-            <BusName>{destination}</BusName>
+            <BusName>{ShowDestination()}</BusName>
         </TripLegs>
     );
 }
@@ -149,7 +155,7 @@ const RuterWrapper = styled.div`
 const SingleTripWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 0 4px 4px 4px;
+    margin: 0 2px 4px 4px;
 
     background-color: white;
     padding: 0.5rem 1rem;

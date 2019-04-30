@@ -81,7 +81,7 @@ const TableWrapper = styled.div``;
 
 const Table = styled.div`
     background-color: white;
-    margin: 0 4px 4px 4px;
+    margin: 0 4px 4px 2px;
     width: auto;
     display: flex;
     flex: 1;

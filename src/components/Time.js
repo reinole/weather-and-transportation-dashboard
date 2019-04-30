@@ -10,7 +10,9 @@ export default function Time() {
             <ClockWrapper>
                 Klokken er: <Clock>{CurrentTime()}</Clock>
             </ClockWrapper>
-            <DateWrapper>Dato: {CurrentDate()}</DateWrapper>
+            <DateWrapper>
+                Dato: <Clock>{CurrentDate()}</Clock>
+            </DateWrapper>
         </WatchWrapper>
     );
 }
