@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useSanityFetch from './hooks/sanityFetch';
-import CurrentDate from './hooks/realDate';
 import { closestTo, format, getDate, getMonth } from 'date-fns';
 
 export default function EventTracker() {
-    const todayDate = CurrentDate();
+    const todayDate = format(new Date(), 'YYYY-MM-DD');
 
     const nameMonths = [
         'Januar',
@@ -43,16 +42,19 @@ export default function EventTracker() {
 
     async function NextEvent() {
         let eventDates = [];
-        await data.map(events => {
-            return eventDates.push(events.date);
-        });
-        let nextEventDate = closestTo(todayDate, eventDates);
-        let nextEvent = format(
-            new Date(nextEventDate).toLocaleDateString(),
-            'YYYY-DD-MM'
-        );
+        let upcomingEventDates = data.filter(events => events.date > todayDate);
 
-        nextEventObject = data.filter(event => event.date === nextEvent);
+        upcomingEventDates.map(ev => {
+            return eventDates.push(ev.date);
+        });
+
+        let nextEventDate = closestTo(todayDate, eventDates);
+
+        let nextEvent = format(new Date(nextEventDate), 'YYYY-MM-DD');
+
+        nextEventObject = upcomingEventDates.filter(
+            event => event.date === nextEvent
+        );
 
         setNextEventObject(nextEventObject);
     }
@@ -60,24 +62,17 @@ export default function EventTracker() {
     return nextEventObject.map(event => {
         switch (event.eventType) {
             case 'birthday':
-                return RenderBirthday(event);
+                return RenderHoliday(event);
             case 'holiday':
                 return RenderHoliday(event);
             case 'special':
-                return RenderSpecial(event);
+                return RenderHoliday(event);
             default:
                 console.log('default');
         }
     });
 
-    function RenderBirthday(event) {
-        return <Wrapper key={event._id}>Bursdag</Wrapper>;
-    }
-
     function RenderHoliday(event) {
-        console.log(event);
-        console.log(event.date);
-
         let day = getDate(new Date(event.date));
         let month = getMonth(new Date(event.date));
         let formatMonth = nameMonths[month];
@@ -87,11 +82,12 @@ export default function EventTracker() {
                 <EventImage imageSrc={event.posterImage}>
                     <div style={{ display: 'flex', height: '100%' }}>
                         <TextWrapper>
-                            <EventText>Neste helligdag</EventText>
+                            <EventText>{EventTitle(event.eventType)}</EventText>
                             <EventName>{event.title}</EventName>
                             <EventDate>
                                 {day} {formatMonth}
                             </EventDate>
+                            <EventDate>{Countdown(event.date)}</EventDate>
                         </TextWrapper>
                         <TextWrapper />
                     </div>
@@ -100,12 +96,31 @@ export default function EventTracker() {
         );
     }
 
-    function RenderSpecial(event) {
-        return <Wrapper key={event._id}>Spesial</Wrapper>;
+    function Countdown(eventDate) {
+        console.log(eventDate);
+        const oneDay = 24 * 60 * 60 * 1000;
+        let countdownDate = Math.round(
+            Math.abs(
+                (new Date(eventDate).getTime() - new Date().getTime()) / oneDay
+            )
+        );
+
+        console.log(countdownDate);
+
+        return <span>Kun {countdownDate} igjen!</span>;
     }
 
-    function Countdown() {
-        return <div />;
+    function EventTitle(eventType) {
+        switch (eventType) {
+            case 'holiday':
+                return <span>Helligdag</span>;
+            case 'birthday':
+                return <span>Bursdag</span>;
+            case 'special':
+                return <span>Event</span>;
+            default:
+                return <span>event</span>;
+        }
     }
 }
 

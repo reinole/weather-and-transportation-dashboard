@@ -5,6 +5,7 @@ import Weather from './components/Weather';
 import Ruter from './components/Ruter';
 import Time from './components/Time';
 import EventTracker from './components/EventTracker';
+import ImagePresenter from './components/ImagePresenter';
 
 class App extends Component {
     render() {
@@ -19,7 +20,7 @@ class App extends Component {
                     </Wrapper>
                     <Wrapper>
                         <EventTracker />
-                        <EventTracker />
+                        <ImagePresenter />
                     </Wrapper>
                 </div>
             </div>
